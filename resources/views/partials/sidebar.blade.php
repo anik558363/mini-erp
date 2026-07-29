@@ -1,0 +1,32 @@
+<div class="sidebar">
+
+    <h4 class="text-white text-center py-3 border-bottom">
+        ERP
+    </h4>
+
+    <a href="/">
+        <i class="bi bi-speedometer2"></i>
+        Dashboard
+    </a>
+
+    <a href="#">
+        <i class="bi bi-box-seam"></i>
+        Products
+    </a>
+
+    <a href="#">
+        <i class="bi bi-truck"></i>
+        Suppliers
+    </a>
+
+    <a href="#">
+        <i class="bi bi-card-checklist"></i>
+        Purchase Requisition
+    </a>
+
+    <a href="#">
+        <i class="bi bi-bag-check"></i>
+        Purchase Order
+    </a>
+
+</div>
