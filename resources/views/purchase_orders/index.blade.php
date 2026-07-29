@@ -1,21 +1,19 @@
 @extends('layouts.app')
 
-
 @section('content')
-
 
 <div class="container mt-4">
 
 
     <div class="d-flex justify-content-between align-items-center mb-3">
 
-        <h3>Purchase Requisitions</h3>
+        <h3>Purchase Orders</h3>
 
 
-        <a href="{{ route('purchase-requisitions.create') }}"
+        <a href="{{ route('purchase-orders.create') }}"
            class="btn btn-primary">
 
-            Create PR
+            Create PO
 
         </a>
 
@@ -35,8 +33,8 @@
 
 
 
-    <div class="card">
 
+    <div class="card">
 
         <div class="card-body">
 
@@ -49,18 +47,12 @@
                     <tr>
 
                         <th>#</th>
-
+                        <th>PO No</th>
                         <th>PR No</th>
-
                         <th>Employee</th>
+                        <th>Supplier</th>
+                        <th>Order Date</th>
 
-                        <th>Department</th>
-
-                        <th>Items</th>
-
-
-
-                        <th>Action</th>
                     </tr>
 
                 </thead>
@@ -70,7 +62,7 @@
                 <tbody>
 
 
-                @forelse($prs as $pr)
+                @forelse($orders as $order)
 
 
                     <tr>
@@ -82,96 +74,29 @@
 
 
                         <td>
-                            {{ $pr->requisition_no }}
+                            {{ $order->po_no }}
                         </td>
 
 
-
                         <td>
-                            {{ $pr->employee->name }}
+                           {{ $order->purchaseRequisition->requisition_no }}
                         </td>
 
 
-
                         <td>
-                            {{ $pr->department->name }}
+                            {{ $order->requisition->employee->name ?? 'N/A' }}
                         </td>
 
 
-
                         <td>
-
-                            {{ $pr->items->count() }}
-
+                            {{ $order->supplier->name }}
                         </td>
 
 
-
-                       
-
                         <td>
+                            {{ $order->order_date }}
+                        </td>
 
-
-@if($pr->status == 'pending')
-
-
-<form action="{{ route('purchase-requisitions.approve',$pr->id) }}"
-      method="POST"
-      class="d-inline">
-
-    @csrf
-    @method('PUT')
-
-    <button type="submit"
-            class="btn btn-sm btn-success">
-
-        Approve
-
-    </button>
-
-</form>
-
-
-
-<form action="{{ route('purchase-requisitions.reject',$pr->id) }}"
-      method="POST"
-      class="d-inline">
-
-    @csrf
-    @method('PUT')
-
-    <button type="submit"
-            class="btn btn-sm btn-danger">
-
-        Reject
-
-    </button>
-
-</form>
-
-
-
-@elseif($pr->status == 'approved')
-
-
-<span class="badge bg-success">
-    Approved
-</span>
-
-
-
-@else
-
-
-<span class="badge bg-danger">
-    Rejected
-</span>
-
-
-@endif
-
-
-</td>
 
                     </tr>
 
@@ -184,7 +109,7 @@
 
                         <td colspan="6" class="text-center">
 
-                            No PR Found
+                            No Purchase Orders Found
 
                         </td>
 
@@ -201,12 +126,10 @@
 
 
 
-            {{ $prs->links() }}
-
+            {{ $orders->links() }}
 
 
         </div>
-
 
     </div>
 

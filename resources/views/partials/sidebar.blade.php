@@ -47,10 +47,10 @@
 
 
 
-    <a href="#">
-        <i class="bi bi-bag-check"></i>
-        Purchase Order
-    </a>
+    <a href="{{ route('purchase-orders.index') }}">
+    <i class="bi bi-bag-check"></i>
+    Purchase Order
+</a>
 
 
 </div>

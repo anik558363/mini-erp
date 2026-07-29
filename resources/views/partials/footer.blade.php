@@ -2,7 +2,7 @@
 
     <small>
 
-        © {{ date('Y') }} Mini ERP | Laravel 12 Technical Assessment
+        © {{ date('Y') }} Mini ERP | Laravel 12
 
     </small>
 

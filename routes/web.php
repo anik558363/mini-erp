@@ -7,7 +7,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PurchaseRequisitionController;
-
+use App\Http\Controllers\PurchaseOrderController;
 
 
 
@@ -92,4 +92,41 @@ Route::prefix('purchase-requisitions')->name('purchase-requisitions.')->group(fu
         ->name('create');
     Route::post('/store', [PurchaseRequisitionController::class, 'store'])
         ->name('store');
+
+        Route::put('/approve/{purchaseRequisition}',
+    [PurchaseRequisitionController::class,'approve']
+)->name('approve');
+
+
+Route::put('/reject/{purchaseRequisition}',
+    [PurchaseRequisitionController::class,'reject']
+)->name('reject');
+});
+
+
+
+// Purchase Order
+
+Route::prefix('purchase-orders')
+    ->name('purchase-orders.')
+    ->group(function () {
+
+
+    Route::get('/',
+        [PurchaseOrderController::class,'index']
+    )->name('index');
+
+
+
+    Route::get('/create',
+        [PurchaseOrderController::class,'create']
+    )->name('create');
+
+
+
+    Route::post('/store',
+        [PurchaseOrderController::class,'store']
+    )->name('store');
+
+
 });

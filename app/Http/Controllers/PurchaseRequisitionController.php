@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Product;
 use App\Models\Employee;
 use App\Models\PurchaseRequisition;
@@ -14,33 +13,101 @@ class PurchaseRequisitionController extends Controller
 {
 
 
-    public function index()
+    /**
+     * PR List + Search + Filter
+     */
+    public function index(Request $request)
     {
 
         $prs = PurchaseRequisition::with([
-            'employee',
-            'department',
-            'items'
-        ])
+                'employee',
+                'department',
+                'items'
+            ])
+
+            ->when($request->keyword, function ($query) use ($request) {
+
+                $keyword = $request->keyword;
+
+
+                $query->where(function ($q) use ($keyword) {
+
+
+                    $q->where(
+                        'requisition_no',
+                        'like',
+                        "%{$keyword}%"
+                    )
+
+
+                    ->orWhereHas('employee', function ($employee) use ($keyword) {
+
+                        $employee->where(
+                            'name',
+                            'like',
+                            "%{$keyword}%"
+                        );
+
+                    })
+
+
+                    ->orWhereHas('department', function ($department) use ($keyword) {
+
+                        $department->where(
+                            'name',
+                            'like',
+                            "%{$keyword}%"
+                        );
+
+                    });
+
+
+                });
+
+
+            })
+
+
+            ->when($request->status, function ($query) use ($request) {
+
+
+                $query->where(
+                    'status',
+                    $request->status
+                );
+
+
+            })
+
+
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
+
 
 
         return view(
             'purchase_requisitions.index',
             compact('prs')
         );
+
     }
 
 
 
 
+    /**
+     * Create PR Form
+     */
     public function create()
     {
 
-        $employees = Employee::with('department')->get();
+        $employees = Employee::with('department')
+            ->get();
+
 
         $products = Product::all();
+
 
 
         return view(
@@ -50,11 +117,16 @@ class PurchaseRequisitionController extends Controller
                 'products'
             )
         );
+
     }
 
 
 
 
+
+    /**
+     * Store PR
+     */
     public function store(Request $request)
     {
 
@@ -62,42 +134,103 @@ class PurchaseRequisitionController extends Controller
         $request->validate([
 
 
-            'employee_id' => 'required|exists:employees,id',
+            'employee_id' => [
+                'required',
+                'exists:employees,id'
+            ],
 
 
-            'products' => 'required|array',
+            'products' => [
+                'required',
+                'array',
+                'min:1'
+            ],
 
 
-            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.product_id' => [
+                'required',
+                'exists:products,id'
+            ],
 
 
-            'products.*.quantity' => 'required|integer|min:1',
+            'products.*.quantity' => [
+                'required',
+                'integer',
+                'min:1'
+            ],
 
 
         ]);
 
 
 
+
+        // Duplicate Product Check
+
+        $productIds = collect($request->products)
+            ->pluck('product_id');
+
+
+
+        if ($productIds->count() != $productIds->unique()->count()) {
+
+
+            return back()
+                ->withErrors([
+                    'products' => 'Duplicate products are not allowed.'
+                ])
+                ->withInput();
+
+        }
+
+
+
+
         DB::transaction(function () use ($request) {
 
 
+            $employee = Employee::findOrFail(
+                $request->employee_id
+            );
 
-            $lastId = PurchaseRequisition::count() + 1;
+
+
+            // Generate PR Number
+
+            $lastPR = PurchaseRequisition::latest('id')
+                ->first();
+
+
+
+            $number = $lastPR
+                ? $lastPR->id + 1
+                : 1;
+
+
+
+            $prNumber = 'PR-' . str_pad(
+                $number,
+                5,
+                '0',
+                STR_PAD_LEFT
+            );
+
+
 
 
 
             $pr = PurchaseRequisition::create([
 
-                'requisition_no' =>
-                'PR-' . str_pad($lastId, 5, '0', STR_PAD_LEFT),
+
+                'requisition_no' => $prNumber,
 
 
-                'employee_id' => $request->employee_id,
+                'employee_id' =>
+                    $employee->id,
 
 
                 'department_id' =>
-                Employee::find($request->employee_id)
-                    ->department_id,
+                    $employee->department_id,
 
 
                 'status' => 'pending'
@@ -114,20 +247,136 @@ class PurchaseRequisitionController extends Controller
 
                 $pr->items()->create([
 
-                    'product_id' => $item['product_id'],
 
-                    'quantity' => $item['quantity'],
+                    'product_id' =>
+                        $item['product_id'],
 
-                    'remarks' => $item['remarks'] ?? null
+
+                    'quantity' =>
+                        $item['quantity'],
+
+
+                    'remarks' =>
+                        $item['remarks'] ?? null,
+
 
                 ]);
+
+
             }
+
+
+
         });
 
 
 
+
+
         return redirect()
+
             ->route('purchase-requisitions.index')
-            ->with('success', 'PR created successfully');
+
+            ->with(
+                'success',
+                'Purchase Requisition created successfully.'
+            );
+
+
     }
+
+
+
+
+
+
+    /**
+     * Approve PR
+     */
+    public function approve(PurchaseRequisition $purchaseRequisition)
+    {
+
+
+        if ($purchaseRequisition->status != 'pending') {
+
+
+            return back()
+
+                ->with(
+                    'error',
+                    'Only pending PR can be approved.'
+                );
+
+        }
+
+
+
+        $purchaseRequisition->update([
+
+            'status' => 'approved'
+
+        ]);
+
+
+
+
+        return back()
+
+            ->with(
+                'success',
+                'Purchase Requisition approved successfully.'
+            );
+
+
+    }
+
+
+
+
+
+
+
+    /**
+     * Reject PR
+     */
+    public function reject(PurchaseRequisition $purchaseRequisition)
+    {
+
+
+        if ($purchaseRequisition->status != 'pending') {
+
+
+            return back()
+
+                ->with(
+                    'error',
+                    'Only pending PR can be rejected.'
+                );
+
+        }
+
+
+
+
+        $purchaseRequisition->update([
+
+            'status' => 'rejected'
+
+        ]);
+
+
+
+
+        return back()
+
+            ->with(
+                'success',
+                'Purchase Requisition rejected successfully.'
+            );
+
+
+    }
+
+
+
 }
