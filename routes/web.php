@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DepartmentController;
-
+use App\Http\Controllers\EmployeeController;
 
 
 
@@ -37,7 +37,6 @@ Route::prefix('suppliers')->name('suppliers.')->group(function () {
     Route::get('/edit/{supplier}', [SupplierController::class, 'edit'])->name('edit');
     Route::put('/update/{supplier}', [SupplierController::class, 'update'])->name('update');
     Route::delete('/delete/{supplier}', [SupplierController::class, 'destroy'])->name('destroy');
-
 });
 
 
@@ -46,16 +45,38 @@ Route::prefix('suppliers')->name('suppliers.')->group(function () {
 // department crud
 
 Route::prefix('departments')->name('departments.')->group(function () {
-    Route::get('/', [DepartmentController::class,'index'])
+    Route::get('/', [DepartmentController::class, 'index'])
         ->name('index');
-    Route::get('/create', [DepartmentController::class,'create'])
+    Route::get('/create', [DepartmentController::class, 'create'])
         ->name('create');
-    Route::post('/store', [DepartmentController::class,'store'])
+    Route::post('/store', [DepartmentController::class, 'store'])
         ->name('store');
-    Route::get('/edit/{department}', [DepartmentController::class,'edit'])
+    Route::get('/edit/{department}', [DepartmentController::class, 'edit'])
         ->name('edit');
-    Route::put('/update/{department}', [DepartmentController::class,'update'])
+    Route::put('/update/{department}', [DepartmentController::class, 'update'])
         ->name('update');
-    Route::delete('/delete/{department}', [DepartmentController::class,'destroy'])
+    Route::delete('/delete/{department}', [DepartmentController::class, 'destroy'])
+        ->name('destroy');
+});
+
+
+
+
+
+
+// employee crud
+
+Route::prefix('employees')->name('employees.')->group(function () {
+    Route::get('/', [EmployeeController::class, 'index'])
+        ->name('index');
+    Route::get('/create', [EmployeeController::class, 'create'])
+        ->name('create');
+    Route::post('/store', [EmployeeController::class, 'store'])
+        ->name('store');
+    Route::get('/edit/{employee}', [EmployeeController::class, 'edit'])
+        ->name('edit');
+    Route::put('/update/{employee}', [EmployeeController::class, 'update'])
+        ->name('update');
+    Route::delete('/delete/{employee}', [EmployeeController::class, 'destroy'])
         ->name('destroy');
 });

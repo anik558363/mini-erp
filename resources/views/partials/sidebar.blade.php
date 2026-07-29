@@ -33,6 +33,13 @@
 
 
 
+    <a href="{{ route('employees.index') }}">
+        <i class="bi bi-people"></i>
+        Employees
+    </a>
+
+
+
     <a href="#">
         <i class="bi bi-card-checklist"></i>
         Purchase Requisition
