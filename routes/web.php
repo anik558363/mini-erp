@@ -6,7 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
-
+use App\Http\Controllers\PurchaseRequisitionController;
 
 
 
@@ -79,4 +79,17 @@ Route::prefix('employees')->name('employees.')->group(function () {
         ->name('update');
     Route::delete('/delete/{employee}', [EmployeeController::class, 'destroy'])
         ->name('destroy');
+});
+
+
+
+// Purchase Requisition
+
+Route::prefix('purchase-requisitions')->name('purchase-requisitions.')->group(function () {
+    Route::get('/', [PurchaseRequisitionController::class, 'index'])
+        ->name('index');
+    Route::get('/create', [PurchaseRequisitionController::class, 'create'])
+        ->name('create');
+    Route::post('/store', [PurchaseRequisitionController::class, 'store'])
+        ->name('store');
 });

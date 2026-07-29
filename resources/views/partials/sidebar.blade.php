@@ -40,7 +40,7 @@
 
 
 
-    <a href="#">
+    <a href="{{ route('purchase-requisitions.index') }}">
         <i class="bi bi-card-checklist"></i>
         Purchase Requisition
     </a>
