@@ -9,11 +9,10 @@
         Dashboard
     </a>
 
-    <a href="#">
-        <i class="bi bi-box-seam"></i>
-        Products
-    </a>
-
+   <a href="{{ route('products.index') }}">
+    <i class="bi bi-box-seam"></i>
+    Products
+</a>
     <a href="#">
         <i class="bi bi-truck"></i>
         Suppliers
