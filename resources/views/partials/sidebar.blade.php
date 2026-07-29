@@ -13,10 +13,15 @@
     <i class="bi bi-box-seam"></i>
     Products
 </a>
-    <a href="#">
-        <i class="bi bi-truck"></i>
-        Suppliers
-    </a>
+
+
+ <a href="{{ route('suppliers.index') }}">
+
+    <i class="bi bi-truck"></i>
+
+    Suppliers
+
+</a>
 
     <a href="#">
         <i class="bi bi-card-checklist"></i>

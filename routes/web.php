@@ -3,13 +3,16 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
+
+
+
+
+
 
 
 
 Route::view('/', 'dashboard.index')->name('dashboard');
-
-
-
 
 
 // product crud
@@ -28,4 +31,23 @@ Route::prefix('products')->name('products.')->group(function () {
     Route::put('/update/{product}', [ProductController::class, 'update'])->name('update');
 
     Route::delete('/delete/{product}', [ProductController::class, 'destroy'])->name('destroy');
+});
+
+
+// supplier crud
+
+Route::prefix('suppliers')->name('suppliers.')->group(function () {
+
+    Route::get('/', [SupplierController::class, 'index'])->name('index');
+
+    Route::get('/create', [SupplierController::class, 'create'])->name('create');
+
+    Route::post('/store', [SupplierController::class, 'store'])->name('store');
+
+    Route::get('/edit/{supplier}', [SupplierController::class, 'edit'])->name('edit');
+
+    Route::put('/update/{supplier}', [SupplierController::class, 'update'])->name('update');
+
+    Route::delete('/delete/{supplier}', [SupplierController::class, 'destroy'])->name('destroy');
+
 });
