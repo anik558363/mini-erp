@@ -54,7 +54,7 @@
 
                         <th>Employee</th>
 
-                        <th>Department</th>
+
 
                         <th>Items</th>
 
@@ -93,9 +93,7 @@
 
 
 
-                        <td>
-                            {{ $pr->department->name }}
-                        </td>
+                        
 
 
 
@@ -107,7 +105,7 @@
 
 
 
-                       
+
 
                         <td>
 

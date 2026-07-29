@@ -10,9 +10,37 @@ class ProductController extends Controller
     /**
      * Display a listing of products.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::latest()->paginate(10);
+        $query = Product::query();
+
+        // Search
+        if ($request->search) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('sku', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%")
+                    ->orWhere('unit', 'like', "%{$search}%");
+            });
+        }
+
+
+        // Stock Filter
+        if ($request->stock_status == 'in_stock') {
+
+            $query->where('current_stock', '>', 3);
+        } elseif ($request->stock_status == 'out_of_stock') {
+
+            $query->where('current_stock', 0);
+        }
+
+
+        $products = $query
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
 
         return view('products.index', compact('products'));
     }
