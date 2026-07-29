@@ -12,7 +12,13 @@ use App\Http\Controllers\PurchaseOrderController;
 
 
 
-Route::view('/', 'dashboard.index')->name('dashboard');
+use App\Http\Controllers\DashboardController;
+
+
+Route::get(
+    '/',
+    [DashboardController::class, 'index']
+)->name('dashboard');
 
 
 // product crud

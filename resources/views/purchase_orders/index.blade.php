@@ -49,7 +49,7 @@
                         <th>#</th>
                         <th>PO No</th>
                         <th>PR No</th>
-                        <th>Employee</th>
+
                         <th>Supplier</th>
                         <th>Order Date</th>
 
@@ -83,9 +83,7 @@
                         </td>
 
 
-                        <td>
-                            {{ $order->requisition->employee->name ?? 'N/A' }}
-                        </td>
+                        
 
 
                         <td>
