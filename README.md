@@ -1,59 +1,645 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mini ERP - Inventory & Procurement Module
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Project Information
 
-## About Laravel
+**Company:** Fleek Bangladesh  
+**Position:** Junior Laravel Developer  
+**Project:** Mini ERP - Inventory & Procurement Module  
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A Laravel 12 based Mini ERP Procurement System developed for managing inventory and procurement workflow.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The system allows employees to create purchase requisitions, managers to approve/reject requisitions, and procurement users to generate purchase orders from approved requisitions.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+# Technology Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- Laravel 12
+- PHP 8.2+
+- MySQL
+- Blade Template Engine
+- Bootstrap 5
+- Eloquent ORM
+- Git & GitHub
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Project Features
 
-### Premium Partners
+## Dashboard
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Dashboard provides a quick overview of the system.
 
-## Contributing
+Features:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Total Products
+- Total Suppliers
+- Pending Purchase Requisitions
+- Approved Purchase Requisitions
+- Recent Purchase Orders
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+# Product Management
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Product module includes:
 
-## License
+- Create Product
+- Update Product
+- Delete Product
+- Product Listing
+- SKU Management
+- Unit Management
+- Current Stock Tracking
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+Product Fields:
+
+```
+id
+sku
+name
+unit
+current_stock
+```
+
+
+---
+
+# Supplier Management
+
+Supplier module includes:
+
+- Create Supplier
+- Update Supplier
+- Delete Supplier
+- Supplier Listing
+
+
+Supplier Fields:
+
+```
+id
+name
+phone
+```
+
+
+---
+
+# Purchase Requisition (PR)
+
+Employees can create purchase requisitions with multiple products.
+
+
+Features:
+
+- Multiple products in one requisition
+- Auto generated PR number
+- Quantity validation
+- Duplicate product prevention
+- Transaction based storage
+
+
+Example PR Number:
+
+```
+PR-00001
+PR-00002
+PR-00003
+```
+
+
+Purchase Requisition Fields:
+
+```
+id
+requisition_no
+employee_id
+department_id
+status
+```
+
+
+Requisition Item Fields:
+
+```
+id
+requisition_id
+product_id
+quantity
+remarks
+```
+
+
+---
+
+# Purchase Requisition Workflow
+
+
+```
+Employee
+
+    |
+    |
+Create Purchase Requisition
+
+    |
+    |
+Pending
+
+    |
+    |
+Manager Review
+
+    |
+    |
+Approved / Rejected
+
+```
+
+
+Rules:
+
+- Pending PR can be edited
+- Approved PR cannot be edited
+- Approved PR cannot be deleted
+
+
+---
+
+# Approval Workflow
+
+Available statuses:
+
+
+```
+pending
+approved
+rejected
+```
+
+
+Manager can:
+
+- Approve Purchase Requisition
+- Reject Purchase Requisition
+
+
+---
+
+# Purchase Order (PO)
+
+
+Purchase Order can only be created from approved Purchase Requisition.
+
+
+Features:
+
+- Create PO from approved PR
+- Supplier selection
+- Auto generated PO number
+- Order date tracking
+- PO listing
+
+
+Example:
+
+```
+PO-00001
+PO-00002
+PO-00003
+```
+
+
+Purchase Order Fields:
+
+```
+id
+po_no
+requisition_id
+supplier_id
+order_date
+```
+
+
+---
+
+# Search & Filter
+
+
+Purchase Requisition search:
+
+- Search by PR Number
+- Search by Employee Name
+- Search by Department Name
+
+
+Filter:
+
+- Pending
+- Approved
+- Rejected
+
+
+---
+
+# Database Relationship
+
+
+```
+Department
+
+    |
+    |
+    └── Employee
+
+            |
+            |
+            └── Purchase Requisition
+
+                    |
+                    |
+                    └── Requisition Items
+
+                            |
+                            |
+                            └── Product
+
+
+
+Purchase Requisition
+
+            |
+            |
+            └── Purchase Order
+
+                    |
+                    |
+                    └── Supplier
+
+```
+
+
+---
+
+# Laravel Architecture
+
+
+## Controllers
+
+Location:
+
+```
+app/Http/Controllers
+```
+
+
+Implemented Controllers:
+
+
+```
+DashboardController
+
+ProductController
+
+SupplierController
+
+PurchaseRequisitionController
+
+PurchaseOrderController
+
+```
+
+
+---
+
+## Models
+
+Location:
+
+```
+app/Models
+```
+
+
+Models:
+
+
+```
+Department
+
+Employee
+
+Supplier
+
+Product
+
+PurchaseRequisition
+
+RequisitionItem
+
+PurchaseOrder
+
+```
+
+
+---
+
+# Validation
+
+
+Implemented validations:
+
+
+- Required field validation
+- Foreign key validation
+- Quantity must be greater than zero
+- Duplicate product prevention
+- Approved PR protection
+
+
+Example:
+
+```php
+$request->validate([
+    'quantity' => 'required|integer|min:1'
+]);
+```
+
+
+---
+
+# Database Transaction
+
+
+Purchase Requisition creation uses database transaction to maintain data consistency.
+
+
+Example:
+
+
+```php
+DB::transaction(function(){
+
+    // Store requisition
+
+    // Store requisition items
+
+});
+```
+
+
+---
+
+# Query Optimization
+
+
+Implemented:
+
+- Eager Loading
+- Pagination
+- Relationship optimization
+
+
+Example:
+
+
+```php
+PurchaseOrder::with([
+    'supplier',
+    'purchaseRequisition'
+])
+->paginate(10);
+```
+
+
+---
+
+# Installation Guide
+
+
+## Clone Repository
+
+
+```bash
+git clone YOUR_GITHUB_REPOSITORY_URL
+```
+
+
+Go to project:
+
+
+```bash
+cd mini-erp
+```
+
+
+---
+
+## Install Composer Dependencies
+
+
+```bash
+composer install
+```
+
+
+---
+
+## Environment Setup
+
+
+Copy environment file:
+
+
+```bash
+cp .env.example .env
+```
+
+
+Generate application key:
+
+
+```bash
+php artisan key:generate
+```
+
+
+---
+
+# Database Configuration
+
+
+Update `.env` file:
+
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=mini_erp
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+
+---
+
+# Run Migration
+
+
+```bash
+php artisan migrate
+```
+
+
+---
+
+# Run Seeder
+
+
+```bash
+php artisan db:seed
+```
+
+
+---
+
+# Start Application
+
+
+```bash
+php artisan serve
+```
+
+
+Application URL:
+
+
+```
+http://127.0.0.1:8000
+```
+
+
+---
+
+# Git Workflow
+
+
+Project development was maintained using Git commits.
+
+
+Example commit history:
+
+
+```
+Initial Laravel setup
+
+Created database migrations
+
+Added models and relationships
+
+Implemented Product CRUD
+
+Implemented Supplier CRUD
+
+Created Purchase Requisition module
+
+Added PR approval workflow
+
+Implemented Purchase Order module
+
+Created Dashboard
+
+Added search and filtering
+
+Completed README documentation
+```
+
+
+---
+
+# Database Tables
+
+
+Main tables:
+
+
+```
+departments
+
+employees
+
+suppliers
+
+products
+
+purchase_requisitions
+
+requisition_items
+
+purchase_orders
+
+```
+
+
+---
+
+# Seeder Data
+
+
+Seeder provides sample data for:
+
+
+- Departments
+- Employees
+- Suppliers
+- Products
+
+
+Run:
+
+
+```bash
+php artisan db:seed
+```
+
+
+---
+
+# Future Improvements
+
+
+Possible improvements:
+
+
+- Authentication system
+- Role permission management
+- Stock update after PO receiving
+- Product search API
+- PDF Report Export
+- Excel Export
+- Advanced Dashboard Charts
+
+
+---
+
+# Developer Information
+
+
+**Developer:** Anik Mondol
+
+**Role:** Junior Laravel Developer
+
+**Framework:** Laravel 12
+
+
+---
+
+# License
+
+
+This project was developed for technical assessment purposes.
